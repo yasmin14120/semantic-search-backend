@@ -1,0 +1,122 @@
+{
+  "name": "data_template",
+  "template": {
+    "index_patterns": ["data_*"],
+    "order": 0,
+    "aliases": {
+      "websites": { }
+    },
+    "settings": {
+      "index": {
+        "number_of_shards": "1",
+        "number_of_replicas": "0",
+        "analysis": {
+          "analyzer": {
+            "n-gram_analyzer": {
+              "tokenizer": "autocomplete",
+              "filter": [
+                "lowercase",
+                "stop_word_filter"
+              ]
+            },
+            "pattern_analyzer": {
+              "type": "pattern",
+              "pattern": "[[\\W]&&[^-]]|_",
+              "filter": [
+                "lowercase",
+                "asciifolding",
+                "stop_word_filter"
+              ]
+            }
+          },
+          "tokenizer": {
+            "autocomplete": {
+              "type": "edge_ngram",
+              "min_gram": "2",
+              "max_gram": "20",
+              "token_chars": [
+                "letter"
+              ]
+            }
+          },
+          "filter": {
+            "stop_word_filter": {
+              "type": "stop",
+              "ignore_case": true,
+              "stopwords": ["_english_", "_german_"]
+            }
+          }
+        }
+      }
+    },
+    "mappings": {
+      "dynamic_templates": [
+        {
+      "tags": {
+        "match_mapping_type": "string",
+        "match": "rocket_*",
+        "mapping": {
+          "type": "text",
+              "analyzer": "n-gram_analyzer",
+              "search_analyzer": "pattern_analyzer"
+            }
+          }
+        },
+      {
+    "headers": {
+      "match_mapping_type": "string",
+      "match_pattern": "regex",
+      "match": "h\\d?",
+
+      "mapping": {
+        "type": "text",
+            "analyzer": "n-gram_analyzer",
+            "search_analyzer": "pattern_analyzer"
+          }
+        }
+      }
+    ],
+    "properties": {
+      "domain": {
+        "type": "keyword"
+      },
+      "content": {
+        "type": "text",
+        "analyzer": "n-gram_analyzer",
+        "search_analyzer": "pattern_analyzer"
+      },
+      "url": {
+        "type": "keyword"
+     },
+      "suggest": {
+        "type": "completion"
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "n-gram_analyzer",
+        "search_analyzer": "pattern_analyzer"
+      },
+      "word_embedding_1":
+      {
+        "type": "dense_vector",
+        "dims": 300
+      },
+      "word_embedding_2":
+      {
+        "type": "dense_vector",
+        "dims": 300
+      },
+      "word_embedding_3":
+      {
+        "type": "dense_vector",
+        "dims": 300
+      },
+      "sentence_embedding_1":
+      {
+        "type": "dense_vector",
+        "dims": 2048
+      }
+    }
+  }
+ }
+}
