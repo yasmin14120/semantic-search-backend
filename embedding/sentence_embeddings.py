@@ -148,14 +148,9 @@ def clean_text(strings, model):
         doc_indices.append(sentence_counter)
 
     try:
-        #vectors = model.encode(sentences, bsize=64, tokenize=False, verbose=False)
-        #tic = time.perf_counter()
-        vectors = model(sentences)
-        #toc = time.perf_counter()
-        #print(f"Embedding needs {toc - tic:0.4f} seconds")
-
+        vectors = model.encode(sentences, bsize=64, tokenize=False, verbose=False)
+       
     except Exception:
-        print("EXCEPTION")
         vectors = []
         errors = []
 
